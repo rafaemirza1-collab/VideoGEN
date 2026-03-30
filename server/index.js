@@ -23,8 +23,12 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 // API routes
 const assetsRouter = require('./routes/assets');
 const projectsRouter = require('./routes/projects');
+const brandsRouter = require('./routes/brands');
+const templatesRouter = require('./routes/templates');
 app.use('/api/assets', assetsRouter);
 app.use('/api/projects', projectsRouter);
+app.use('/api/brands', brandsRouter);
+app.use('/api/templates', templatesRouter);
 
 app.post('/capture', async (req, res) => {
   const { url, viewport } = req.body;

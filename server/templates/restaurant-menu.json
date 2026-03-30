@@ -1,0 +1,124 @@
+{
+  "id": "restaurant-menu",
+  "name": "Restaurant Menu Showcase",
+  "description": "Highlight your best dishes with elegant text overlays",
+  "category": "restaurant",
+  "thumbnail": "",
+  "project": {
+    "aspectRatio": "9:16",
+    "resolution": "1080p",
+    "fps": 30,
+    "duration": 15000,
+    "tracks": [
+      {
+        "id": "t1",
+        "name": "Background",
+        "type": "image",
+        "locked": false,
+        "visible": true,
+        "clips": []
+      },
+      {
+        "id": "t2",
+        "name": "Text",
+        "type": "text",
+        "locked": false,
+        "visible": true,
+        "clips": [
+          {
+            "id": "c1",
+            "trackId": "t2",
+            "type": "text",
+            "startTime": 0,
+            "duration": 4000,
+            "source": "",
+            "properties": {
+              "x": 10, "y": 15, "width": 80, "height": 15,
+              "rotation": 0, "opacity": 1,
+              "text": {
+                "content": "YOUR RESTAURANT NAME",
+                "fontFamily": "Georgia, serif",
+                "fontSize": 42,
+                "fontWeight": 700,
+                "color": "#ffffff",
+                "backgroundColor": "",
+                "alignment": "center",
+                "lineHeight": 1.2
+              },
+              "animation": { "entrance": "fade-in", "exit": "fade-out", "entranceDuration": 600, "exitDuration": 400 }
+            }
+          },
+          {
+            "id": "c2",
+            "trackId": "t2",
+            "type": "text",
+            "startTime": 3000,
+            "duration": 4000,
+            "source": "",
+            "properties": {
+              "x": 10, "y": 40, "width": 80, "height": 12,
+              "rotation": 0, "opacity": 1,
+              "text": {
+                "content": "Chef's Special",
+                "fontFamily": "Georgia, serif",
+                "fontSize": 36,
+                "fontWeight": 600,
+                "color": "#f59e0b",
+                "backgroundColor": "",
+                "alignment": "center",
+                "lineHeight": 1.2
+              },
+              "animation": { "entrance": "slide-up", "exit": "fade-out", "entranceDuration": 500, "exitDuration": 400 }
+            }
+          },
+          {
+            "id": "c3",
+            "trackId": "t2",
+            "type": "text",
+            "startTime": 6000,
+            "duration": 4000,
+            "source": "",
+            "properties": {
+              "x": 10, "y": 40, "width": 80, "height": 12,
+              "rotation": 0, "opacity": 1,
+              "text": {
+                "content": "Dish Name — $24.99",
+                "fontFamily": "Georgia, serif",
+                "fontSize": 32,
+                "fontWeight": 500,
+                "color": "#ffffff",
+                "backgroundColor": "#000000",
+                "alignment": "center",
+                "lineHeight": 1.3
+              },
+              "animation": { "entrance": "slide-left", "exit": "fade-out", "entranceDuration": 500, "exitDuration": 400 }
+            }
+          },
+          {
+            "id": "c4",
+            "trackId": "t2",
+            "type": "text",
+            "startTime": 11000,
+            "duration": 4000,
+            "source": "",
+            "properties": {
+              "x": 10, "y": 70, "width": 80, "height": 15,
+              "rotation": 0, "opacity": 1,
+              "text": {
+                "content": "Order Now — Link in Bio",
+                "fontFamily": "sans-serif",
+                "fontSize": 28,
+                "fontWeight": 700,
+                "color": "#000000",
+                "backgroundColor": "#f59e0b",
+                "alignment": "center",
+                "lineHeight": 1.3
+              },
+              "animation": { "entrance": "scale-in", "exit": "none", "entranceDuration": 500, "exitDuration": 500 }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

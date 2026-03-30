@@ -1,0 +1,37 @@
+{
+  "id": "ecommerce-product",
+  "name": "Product Showcase",
+  "description": "Feature your product with pricing and CTA",
+  "category": "ecommerce",
+  "thumbnail": "",
+  "project": {
+    "aspectRatio": "1:1",
+    "resolution": "1080p",
+    "fps": 30,
+    "duration": 15000,
+    "tracks": [
+      { "id": "t1", "name": "Product Images", "type": "image", "locked": false, "visible": true, "clips": [] },
+      {
+        "id": "t2", "name": "Text", "type": "text", "locked": false, "visible": true,
+        "clips": [
+          { "id": "c1", "trackId": "t2", "type": "text", "startTime": 0, "duration": 5000, "source": "",
+            "properties": { "x": 5, "y": 5, "width": 90, "height": 15, "rotation": 0, "opacity": 1,
+              "text": { "content": "NEW ARRIVAL", "fontFamily": "sans-serif", "fontSize": 36, "fontWeight": 800, "color": "#ffffff", "backgroundColor": "#000000", "alignment": "center", "lineHeight": 1.2 },
+              "animation": { "entrance": "slide-up", "exit": "fade-out", "entranceDuration": 500, "exitDuration": 400 } } },
+          { "id": "c2", "trackId": "t2", "type": "text", "startTime": 4000, "duration": 5000, "source": "",
+            "properties": { "x": 10, "y": 72, "width": 80, "height": 12, "rotation": 0, "opacity": 1,
+              "text": { "content": "Product Name — $99", "fontFamily": "sans-serif", "fontSize": 32, "fontWeight": 700, "color": "#ffffff", "backgroundColor": "", "alignment": "center", "lineHeight": 1.2 },
+              "animation": { "entrance": "fade-in", "exit": "fade-out", "entranceDuration": 500, "exitDuration": 400 } } },
+          { "id": "c3", "trackId": "t2", "type": "text", "startTime": 8000, "duration": 4000, "source": "",
+            "properties": { "x": 10, "y": 40, "width": 80, "height": 15, "rotation": 0, "opacity": 1,
+              "text": { "content": "Free Shipping\non orders $50+", "fontFamily": "sans-serif", "fontSize": 28, "fontWeight": 600, "color": "#000000", "backgroundColor": "#fbbf24", "alignment": "center", "lineHeight": 1.3 },
+              "animation": { "entrance": "scale-in", "exit": "fade-out", "entranceDuration": 400, "exitDuration": 300 } } },
+          { "id": "c4", "trackId": "t2", "type": "text", "startTime": 11500, "duration": 3500, "source": "",
+            "properties": { "x": 10, "y": 75, "width": 80, "height": 12, "rotation": 0, "opacity": 1,
+              "text": { "content": "SHOP NOW", "fontFamily": "sans-serif", "fontSize": 40, "fontWeight": 900, "color": "#ffffff", "backgroundColor": "#3b82f6", "alignment": "center", "lineHeight": 1.2 },
+              "animation": { "entrance": "scale-in", "exit": "none", "entranceDuration": 400, "exitDuration": 500 } } }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "id": "fitness-promo",
+  "name": "Gym / Fitness Promo",
+  "description": "High-energy promo for gyms and fitness brands",
+  "category": "fitness",
+  "thumbnail": "",
+  "project": {
+    "aspectRatio": "9:16",
+    "resolution": "1080p",
+    "fps": 30,
+    "duration": 15000,
+    "tracks": [
+      { "id": "t1", "name": "Background", "type": "image", "locked": false, "visible": true, "clips": [] },
+      {
+        "id": "t2", "name": "Text", "type": "text", "locked": false, "visible": true,
+        "clips": [
+          {
+            "id": "c1", "trackId": "t2", "type": "text", "startTime": 0, "duration": 4000, "source": "",
+            "properties": { "x": 5, "y": 15, "width": 90, "height": 20, "rotation": 0, "opacity": 1,
+              "text": { "content": "TRANSFORM YOUR BODY", "fontFamily": "sans-serif", "fontSize": 48, "fontWeight": 900, "color": "#ffffff", "backgroundColor": "", "alignment": "center", "lineHeight": 1.1 },
+              "animation": { "entrance": "scale-in", "exit": "fade-out", "entranceDuration": 400, "exitDuration": 300 }
+            }
+          },
+          {
+            "id": "c2", "trackId": "t2", "type": "text", "startTime": 3500, "duration": 4000, "source": "",
+            "properties": { "x": 10, "y": 40, "width": 80, "height": 12, "rotation": 0, "opacity": 1,
+              "text": { "content": "YOUR GYM NAME", "fontFamily": "sans-serif", "fontSize": 40, "fontWeight": 800, "color": "#ef4444", "backgroundColor": "", "alignment": "center", "lineHeight": 1.2 },
+              "animation": { "entrance": "slide-left", "exit": "fade-out", "entranceDuration": 400, "exitDuration": 300 }
+            }
+          },
+          {
+            "id": "c3", "trackId": "t2", "type": "text", "startTime": 7000, "duration": 4000, "source": "",
+            "properties": { "x": 10, "y": 35, "width": 80, "height": 20, "rotation": 0, "opacity": 1,
+              "text": { "content": "First Month FREE\nNo Contract Required", "fontFamily": "sans-serif", "fontSize": 32, "fontWeight": 700, "color": "#ffffff", "backgroundColor": "#ef4444", "alignment": "center", "lineHeight": 1.3 },
+              "animation": { "entrance": "slide-up", "exit": "fade-out", "entranceDuration": 400, "exitDuration": 300 }
+            }
+          },
+          {
+            "id": "c4", "trackId": "t2", "type": "text", "startTime": 11000, "duration": 4000, "source": "",
+            "properties": { "x": 10, "y": 70, "width": 80, "height": 12, "rotation": 0, "opacity": 1,
+              "text": { "content": "SIGN UP TODAY", "fontFamily": "sans-serif", "fontSize": 36, "fontWeight": 900, "color": "#000000", "backgroundColor": "#fbbf24", "alignment": "center", "lineHeight": 1.3 },
+              "animation": { "entrance": "scale-in", "exit": "none", "entranceDuration": 400, "exitDuration": 500 }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

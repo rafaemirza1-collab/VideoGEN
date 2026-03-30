@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { nanoid } from 'nanoid';
 
@@ -8,10 +8,15 @@ export default function Dashboard() {
   const router = useRouter();
   const [projects, setProjects] = useState<{ id: string; name: string; updatedAt: string }[]>([]);
 
+  useEffect(() => {
+    fetch('/api/projects')
+      .then((r) => r.json())
+      .then((d) => setProjects(d.projects || []))
+      .catch(() => {});
+  }, []);
+
   const createProject = () => {
     const id = nanoid(10);
-    const project = { id, name: 'Untitled Project', updatedAt: new Date().toISOString() };
-    setProjects((prev) => [project, ...prev]);
     router.push(`/editor/${id}`);
   };
 
@@ -22,11 +27,17 @@ export default function Dashboard() {
         <p className="text-text-muted mt-1">AI-powered video creation platform</p>
       </header>
 
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold text-white">Projects</h2>
+      <div className="flex items-center gap-3 mb-6">
+        <h2 className="text-xl font-semibold text-white flex-1">Projects</h2>
+        <a
+          href="/templates"
+          className="px-5 py-2.5 bg-bg-card border border-border text-white font-medium rounded-lg hover:border-border-hover transition-colors text-sm"
+        >
+          Browse Templates
+        </a>
         <button
           onClick={createProject}
-          className="px-5 py-2.5 bg-white text-black font-semibold rounded-lg hover:bg-accent-hover transition-colors"
+          className="px-5 py-2.5 bg-white text-black font-semibold rounded-lg hover:bg-accent-hover transition-colors text-sm"
         >
           + New Project
         </button>
@@ -35,12 +46,20 @@ export default function Dashboard() {
       {projects.length === 0 ? (
         <div className="bg-bg-card border border-border rounded-xl p-12 text-center">
           <p className="text-text-muted text-lg mb-4">No projects yet</p>
-          <button
-            onClick={createProject}
-            className="px-6 py-3 bg-white text-black font-semibold rounded-lg hover:bg-accent-hover transition-colors"
-          >
-            Create Your First Video
-          </button>
+          <div className="flex gap-3 justify-center">
+            <a
+              href="/templates"
+              className="px-6 py-3 bg-bg-hover border border-border text-white font-medium rounded-lg hover:border-border-hover transition-colors"
+            >
+              Start from Template
+            </a>
+            <button
+              onClick={createProject}
+              className="px-6 py-3 bg-white text-black font-semibold rounded-lg hover:bg-accent-hover transition-colors"
+            >
+              Blank Project
+            </button>
+          </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

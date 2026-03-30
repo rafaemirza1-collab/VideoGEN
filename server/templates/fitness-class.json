@@ -1,0 +1,33 @@
+{
+  "id": "fitness-class",
+  "name": "Class Schedule",
+  "description": "Promote weekly fitness classes and schedules",
+  "category": "fitness",
+  "thumbnail": "",
+  "project": {
+    "aspectRatio": "9:16",
+    "resolution": "1080p",
+    "fps": 30,
+    "duration": 15000,
+    "tracks": [
+      { "id": "t1", "name": "Background", "type": "image", "locked": false, "visible": true, "clips": [] },
+      {
+        "id": "t2", "name": "Text", "type": "text", "locked": false, "visible": true,
+        "clips": [
+          { "id": "c1", "trackId": "t2", "type": "text", "startTime": 0, "duration": 5000, "source": "",
+            "properties": { "x": 5, "y": 10, "width": 90, "height": 15, "rotation": 0, "opacity": 1,
+              "text": { "content": "THIS WEEK'S CLASSES", "fontFamily": "sans-serif", "fontSize": 42, "fontWeight": 900, "color": "#ffffff", "backgroundColor": "#ef4444", "alignment": "center", "lineHeight": 1.2 },
+              "animation": { "entrance": "slide-up", "exit": "fade-out", "entranceDuration": 500, "exitDuration": 400 } } },
+          { "id": "c2", "trackId": "t2", "type": "text", "startTime": 3000, "duration": 4000, "source": "",
+            "properties": { "x": 10, "y": 32, "width": 80, "height": 25, "rotation": 0, "opacity": 1,
+              "text": { "content": "MON — HIIT 6PM\nWED — YOGA 7PM\nFRI — SPIN 5PM", "fontFamily": "sans-serif", "fontSize": 28, "fontWeight": 600, "color": "#ffffff", "backgroundColor": "", "alignment": "center", "lineHeight": 1.6 },
+              "animation": { "entrance": "typewriter", "exit": "fade-out", "entranceDuration": 2000, "exitDuration": 400 } } },
+          { "id": "c3", "trackId": "t2", "type": "text", "startTime": 10000, "duration": 5000, "source": "",
+            "properties": { "x": 10, "y": 70, "width": 80, "height": 12, "rotation": 0, "opacity": 1,
+              "text": { "content": "Book Your Spot — Link in Bio", "fontFamily": "sans-serif", "fontSize": 26, "fontWeight": 700, "color": "#000000", "backgroundColor": "#4ade80", "alignment": "center", "lineHeight": 1.3 },
+              "animation": { "entrance": "scale-in", "exit": "none", "entranceDuration": 500, "exitDuration": 500 } } }
+        ]
+      }
+    ]
+  }
+}

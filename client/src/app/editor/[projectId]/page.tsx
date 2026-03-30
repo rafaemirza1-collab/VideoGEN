@@ -11,8 +11,9 @@ import CapturePanel from '@/components/panels/CapturePanel';
 import ExportPanel from '@/components/panels/ExportPanel';
 import AssetPanel from '@/components/panels/AssetPanel';
 import AnimationPanel from '@/components/panels/AnimationPanel';
+import BrandPanel from '@/components/panels/BrandPanel';
 
-type SideTab = 'capture' | 'assets' | 'export';
+type SideTab = 'capture' | 'assets' | 'brand' | 'export';
 type RightTab = 'properties' | 'animation';
 
 export default function EditorPage() {
@@ -23,14 +24,24 @@ export default function EditorPage() {
   const selectedClipIds = useTimelineStore((s) => s.selectedClipIds);
 
   useEffect(() => {
-    if (params.projectId && project.id !== params.projectId) {
-      setProject({
-        ...project,
-        id: params.projectId as string,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+    if (!params.projectId) return;
+    // Try to load saved project
+    fetch(`/api/projects/${params.projectId}`)
+      .then((r) => { if (r.ok) return r.json(); throw new Error('not found'); })
+      .then((saved) => {
+        if (saved?.data) setProject(saved.data);
+      })
+      .catch(() => {
+        // New project
+        if (project.id !== params.projectId) {
+          setProject({
+            ...project,
+            id: params.projectId as string,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          });
+        }
       });
-    }
   }, [params.projectId]);
 
   const handleAddText = () => {
@@ -110,7 +121,7 @@ export default function EditorPage() {
         {/* Left sidebar */}
         <div className="w-64 bg-bg-card border-r border-border flex flex-col shrink-0">
           <div className="flex border-b border-border">
-            {(['capture', 'assets', 'export'] as SideTab[]).map((tab) => (
+            {(['capture', 'assets', 'brand', 'export'] as SideTab[]).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setSideTab(tab)}
@@ -125,6 +136,7 @@ export default function EditorPage() {
           <div className="flex-1 overflow-y-auto">
             {sideTab === 'capture' && <CapturePanel />}
             {sideTab === 'assets' && <AssetPanel />}
+            {sideTab === 'brand' && <BrandPanel />}
             {sideTab === 'export' && <ExportPanel />}
           </div>
         </div>

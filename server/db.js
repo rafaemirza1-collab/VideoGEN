@@ -25,4 +25,19 @@ db.exec(`
   )
 `);
 
+db.exec(`
+  CREATE TABLE IF NOT EXISTS brands (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    logo TEXT,
+    primaryColor TEXT NOT NULL,
+    secondaryColor TEXT NOT NULL,
+    accentColor TEXT NOT NULL,
+    headingFont TEXT NOT NULL,
+    bodyFont TEXT NOT NULL,
+    createdAt TEXT NOT NULL,
+    updatedAt TEXT NOT NULL
+  )
+`);
+
 module.exports = db;

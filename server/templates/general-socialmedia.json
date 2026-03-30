@@ -1,0 +1,37 @@
+{
+  "id": "general-socialmedia",
+  "name": "Social Media Promo",
+  "description": "Playful social-media style with bold text and CTAs",
+  "category": "general",
+  "thumbnail": "",
+  "project": {
+    "aspectRatio": "9:16",
+    "resolution": "1080p",
+    "fps": 30,
+    "duration": 15000,
+    "tracks": [
+      { "id": "t1", "name": "Background", "type": "image", "locked": false, "visible": true, "clips": [] },
+      {
+        "id": "t2", "name": "Text", "type": "text", "locked": false, "visible": true,
+        "clips": [
+          { "id": "c1", "trackId": "t2", "type": "text", "startTime": 0, "duration": 4000, "source": "",
+            "properties": { "x": 5, "y": 20, "width": 90, "height": 20, "rotation": 0, "opacity": 1,
+              "text": { "content": "DID YOU KNOW?", "fontFamily": "sans-serif", "fontSize": 52, "fontWeight": 900, "color": "#ffffff", "backgroundColor": "", "alignment": "center", "lineHeight": 1.1 },
+              "animation": { "entrance": "scale-in", "exit": "fade-out", "entranceDuration": 400, "exitDuration": 300 } } },
+          { "id": "c2", "trackId": "t2", "type": "text", "startTime": 3500, "duration": 5000, "source": "",
+            "properties": { "x": 10, "y": 35, "width": 80, "height": 25, "rotation": 0, "opacity": 1,
+              "text": { "content": "Your hook text goes here — make it catchy and engaging", "fontFamily": "sans-serif", "fontSize": 30, "fontWeight": 600, "color": "#ffffff", "backgroundColor": "#8b5cf6", "alignment": "center", "lineHeight": 1.4 },
+              "animation": { "entrance": "typewriter", "exit": "fade-out", "entranceDuration": 2500, "exitDuration": 400 } } },
+          { "id": "c3", "trackId": "t2", "type": "text", "startTime": 9000, "duration": 3000, "source": "",
+            "properties": { "x": 10, "y": 42, "width": 80, "height": 10, "rotation": 0, "opacity": 1,
+              "text": { "content": "@yourbrand", "fontFamily": "sans-serif", "fontSize": 36, "fontWeight": 700, "color": "#8b5cf6", "backgroundColor": "", "alignment": "center", "lineHeight": 1.2 },
+              "animation": { "entrance": "fade-in", "exit": "fade-out", "entranceDuration": 500, "exitDuration": 400 } } },
+          { "id": "c4", "trackId": "t2", "type": "text", "startTime": 11500, "duration": 3500, "source": "",
+            "properties": { "x": 10, "y": 72, "width": 80, "height": 12, "rotation": 0, "opacity": 1,
+              "text": { "content": "FOLLOW FOR MORE", "fontFamily": "sans-serif", "fontSize": 34, "fontWeight": 900, "color": "#000000", "backgroundColor": "#fbbf24", "alignment": "center", "lineHeight": 1.2 },
+              "animation": { "entrance": "slide-up", "exit": "none", "entranceDuration": 400, "exitDuration": 500 } } }
+        ]
+      }
+    ]
+  }
+}
