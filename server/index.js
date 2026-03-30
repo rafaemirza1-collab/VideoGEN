@@ -6,6 +6,16 @@ const { renderVideo } = require('./render');
 
 const app = express();
 app.use(express.json());
+
+// CORS for Next.js dev server
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  if (req.method === 'OPTIONS') return res.sendStatus(200);
+  next();
+});
+
 app.use(express.static(path.join(__dirname, '../public')));
 app.use('/output', express.static(path.join(__dirname, '../output')));
 
@@ -37,5 +47,5 @@ app.get('/music-list', (req, res) => {
   res.json({ tracks: files });
 });
 
-const PORT = 3000;
-app.listen(PORT, () => console.log(`QQ VideoGen running at http://localhost:${PORT}`));
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => console.log(`QQ VideoGen API running at http://localhost:${PORT}`));
