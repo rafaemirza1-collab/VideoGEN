@@ -145,7 +145,9 @@ async function captureWebsite(url, viewport = 'desktop') {
       else req.continue();
     });
 
-    await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    // Wait a bit for JS to render after DOM loads
+    await sleep(2000);
     await sleep(1500);
     await dismissOverlays(page);
     await sleep(500);
