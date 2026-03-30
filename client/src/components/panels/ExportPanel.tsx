@@ -2,11 +2,13 @@
 
 import { useState } from 'react';
 import { useProjectStore } from '@/stores/project-store';
+import { useToastStore } from '@/components/ui/Toast';
 import type { AspectRatio, Resolution } from '@/lib/types';
 
 export default function ExportPanel() {
   const project = useProjectStore((s) => s.project);
   const { setAspectRatio, setResolution } = useProjectStore();
+  const addToast = useToastStore((s) => s.addToast);
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
   const [videoFile, setVideoFile] = useState('');
@@ -33,8 +35,10 @@ export default function ExportPanel() {
 
       setVideoFile(data.file);
       setStatus('Export complete!');
+      addToast('Video exported successfully!', 'success');
     } catch (err: any) {
       setStatus(`Error: ${err.message}`);
+      addToast(`Export failed: ${err.message}`, 'error');
     } finally {
       setLoading(false);
     }

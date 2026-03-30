@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useProjectStore } from '@/stores/project-store';
+import { useToastStore } from '@/components/ui/Toast';
 
 type Step = 'info' | 'generating' | 'preview';
 
@@ -15,6 +16,7 @@ interface ScenePreview {
 
 export default function AIGeneratePanel() {
   const { setProject, project } = useProjectStore();
+  const addToast = useToastStore((s) => s.addToast);
   const [step, setStep] = useState<Step>('info');
   const [businessName, setBusinessName] = useState('');
   const [businessType, setBusinessType] = useState('general');
@@ -55,8 +57,10 @@ export default function AIGeneratePanel() {
       setScenes(data.scenes);
       setGeneratedProject(data.project);
       setStep('preview');
+      addToast('Video script generated!', 'success');
     } catch (err: any) {
       setError(err.message);
+      addToast('Generation failed', 'error');
       setStep('info');
     }
   };
@@ -70,6 +74,7 @@ export default function AIGeneratePanel() {
       createdAt: project.createdAt,
       updatedAt: new Date().toISOString(),
     });
+    addToast('Applied to timeline!', 'success');
     setStep('info');
     setScriptText('');
     setScenes([]);

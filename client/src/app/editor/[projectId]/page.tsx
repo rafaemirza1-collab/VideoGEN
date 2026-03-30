@@ -13,6 +13,9 @@ import AssetPanel from '@/components/panels/AssetPanel';
 import AnimationPanel from '@/components/panels/AnimationPanel';
 import BrandPanel from '@/components/panels/BrandPanel';
 import AIGeneratePanel from '@/components/panels/AIGeneratePanel';
+import ErrorBoundary from '@/components/ui/ErrorBoundary';
+import ToastContainer from '@/components/ui/Toast';
+import KeyboardShortcuts from '@/components/ui/KeyboardShortcuts';
 
 type SideTab = 'ai' | 'capture' | 'assets' | 'brand' | 'export';
 type RightTab = 'properties' | 'animation';
@@ -100,6 +103,7 @@ export default function EditorPage() {
   }, [project]);
 
   return (
+    <ErrorBoundary>
     <div className="h-screen flex flex-col bg-bg overflow-hidden">
       {/* Top bar */}
       <div className="h-11 bg-bg-card border-b border-border flex items-center px-4 gap-4 shrink-0">
@@ -175,6 +179,9 @@ export default function EditorPage() {
           </div>
         </div>
       </div>
+      <ToastContainer />
+      <KeyboardShortcuts />
     </div>
+    </ErrorBoundary>
   );
 }
