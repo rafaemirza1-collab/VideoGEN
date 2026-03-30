@@ -24,7 +24,7 @@ export default function PropertiesPanel() {
   }
 
   return (
-    <div className="w-64 bg-bg-card border-l border-border overflow-y-auto">
+    <div className="overflow-y-auto">
       <div className="p-3 border-b border-border">
         <h3 className="text-xs font-semibold text-text-muted uppercase tracking-wide mb-3">
           Project

@@ -1,5 +1,8 @@
 node_modules/
 output/*.mp4
 output/session_*/
+output/render_*/
 client/.next/
 client/node_modules/
+uploads/
+data.db

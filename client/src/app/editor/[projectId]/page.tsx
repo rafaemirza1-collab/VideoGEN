@@ -3,18 +3,24 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useProjectStore } from '@/stores/project-store';
+import { useTimelineStore } from '@/stores/timeline-store';
 import Timeline from '@/components/timeline/Timeline';
 import PreviewCanvas from '@/components/canvas/PreviewCanvas';
 import PropertiesPanel from '@/components/panels/PropertiesPanel';
 import CapturePanel from '@/components/panels/CapturePanel';
 import ExportPanel from '@/components/panels/ExportPanel';
+import AssetPanel from '@/components/panels/AssetPanel';
+import AnimationPanel from '@/components/panels/AnimationPanel';
 
-type SideTab = 'capture' | 'export';
+type SideTab = 'capture' | 'assets' | 'export';
+type RightTab = 'properties' | 'animation';
 
 export default function EditorPage() {
   const params = useParams();
   const { setProject, project, addTrack, addClip } = useProjectStore();
   const [sideTab, setSideTab] = useState<SideTab>('capture');
+  const [rightTab, setRightTab] = useState<RightTab>('properties');
+  const selectedClipIds = useTimelineStore((s) => s.selectedClipIds);
 
   useEffect(() => {
     if (params.projectId && project.id !== params.projectId) {
@@ -28,6 +34,7 @@ export default function EditorPage() {
   }, [params.projectId]);
 
   const handleAddText = () => {
+    const playhead = useTimelineStore.getState().playheadTime;
     let textTrack = project.tracks.find((t) => t.type === 'text');
     let trackId: string;
     if (!textTrack) {
@@ -37,7 +44,7 @@ export default function EditorPage() {
     }
     addClip(trackId, {
       type: 'text',
-      startTime: 0,
+      startTime: playhead,
       duration: 5000,
       source: '',
       properties: {
@@ -57,9 +64,28 @@ export default function EditorPage() {
           alignment: 'center',
           lineHeight: 1.2,
         },
+        animation: {
+          entrance: 'none',
+          exit: 'none',
+          entranceDuration: 500,
+          exitDuration: 500,
+        },
       },
     });
   };
+
+  // Auto-save project
+  useEffect(() => {
+    if (!project.id) return;
+    const timer = setTimeout(() => {
+      fetch(`/api/projects/${project.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: project.name, data: project }),
+      }).catch(() => {});
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [project]);
 
   return (
     <div className="h-screen flex flex-col bg-bg overflow-hidden">
@@ -84,25 +110,21 @@ export default function EditorPage() {
         {/* Left sidebar */}
         <div className="w-64 bg-bg-card border-r border-border flex flex-col shrink-0">
           <div className="flex border-b border-border">
-            <button
-              onClick={() => setSideTab('capture')}
-              className={`flex-1 py-2 text-xs font-medium ${
-                sideTab === 'capture' ? 'text-white bg-bg-hover' : 'text-text-muted'
-              }`}
-            >
-              Capture
-            </button>
-            <button
-              onClick={() => setSideTab('export')}
-              className={`flex-1 py-2 text-xs font-medium ${
-                sideTab === 'export' ? 'text-white bg-bg-hover' : 'text-text-muted'
-              }`}
-            >
-              Export
-            </button>
+            {(['capture', 'assets', 'export'] as SideTab[]).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setSideTab(tab)}
+                className={`flex-1 py-2 text-xs font-medium capitalize ${
+                  sideTab === tab ? 'text-white bg-bg-hover' : 'text-text-muted'
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
           </div>
           <div className="flex-1 overflow-y-auto">
             {sideTab === 'capture' && <CapturePanel />}
+            {sideTab === 'assets' && <AssetPanel />}
             {sideTab === 'export' && <ExportPanel />}
           </div>
         </div>
@@ -112,8 +134,26 @@ export default function EditorPage() {
           <div className="flex-1 flex min-h-0">
             {/* Preview */}
             <PreviewCanvas />
-            {/* Properties */}
-            <PropertiesPanel />
+            {/* Right panel */}
+            <div className="w-64 bg-bg-card border-l border-border flex flex-col shrink-0">
+              <div className="flex border-b border-border">
+                {(['properties', 'animation'] as RightTab[]).map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setRightTab(tab)}
+                    className={`flex-1 py-2 text-xs font-medium capitalize ${
+                      rightTab === tab ? 'text-white bg-bg-hover' : 'text-text-muted'
+                    }`}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
+              <div className="flex-1 overflow-y-auto">
+                {rightTab === 'properties' && <PropertiesPanel />}
+                {rightTab === 'animation' && <AnimationPanel />}
+              </div>
+            </div>
           </div>
           {/* Timeline */}
           <div className="h-72 shrink-0">

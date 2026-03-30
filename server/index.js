@@ -18,6 +18,13 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(__dirname, '../public')));
 app.use('/output', express.static(path.join(__dirname, '../output')));
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
+// API routes
+const assetsRouter = require('./routes/assets');
+const projectsRouter = require('./routes/projects');
+app.use('/api/assets', assetsRouter);
+app.use('/api/projects', projectsRouter);
 
 app.post('/capture', async (req, res) => {
   const { url, viewport } = req.body;
@@ -35,6 +42,20 @@ app.post('/generate', async (req, res) => {
   if (!clips || clips.length === 0) return res.status(400).json({ error: 'clips is required' });
   try {
     const videoPath = await renderVideo({ clips, format, style, music, duration });
+    res.json({ file: path.basename(videoPath) });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Timeline-aware render (Phase 2)
+const { renderTimeline } = require('./services/render-engine');
+
+app.post('/api/render', async (req, res) => {
+  const { project } = req.body;
+  if (!project) return res.status(400).json({ error: 'project data is required' });
+  try {
+    const videoPath = await renderTimeline(project);
     res.json({ file: path.basename(videoPath) });
   } catch (err) {
     res.status(500).json({ error: err.message });
