@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QQ VideoGen</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>QQ VideoGen</h1>
+      <p class="tagline">Instagram-ready videos from any website</p>
+    </header>
+
+    <!-- Step 1: URL Input -->
+    <section id="step-capture" class="card">
+      <h2>1. Website URL</h2>
+      <div class="row">
+        <input type="url" id="url-input" placeholder="https://clientwebsite.com" />
+        <div class="viewport-toggle">
+          <button class="toggle active" data-vp="desktop">Desktop</button>
+          <button class="toggle" data-vp="mobile">Mobile</button>
+        </div>
+        <button id="btn-capture" class="btn-primary">Capture Site</button>
+      </div>
+      <div id="capture-status" class="status"></div>
+    </section>
+
+    <!-- Step 2: Preview & Select -->
+    <section id="step-preview" class="card hidden">
+      <h2>2. Select Shots</h2>
+      <p class="hint">Click to deselect any shots you don't want in the video.</p>
+      <div id="preview-grid" class="preview-grid"></div>
+    </section>
+
+    <!-- Step 3: Options -->
+    <section id="step-options" class="card hidden">
+      <h2>3. Video Options</h2>
+      <div class="options-grid">
+        <div class="option-group">
+          <label>Format</label>
+          <select id="opt-format">
+            <option value="9:16">9:16 Vertical (Reels)</option>
+            <option value="1:1">1:1 Square</option>
+          </select>
+        </div>
+        <div class="option-group">
+          <label>Style</label>
+          <select id="opt-style">
+            <option value="minimal">Clean &amp; Minimal</option>
+            <option value="branded">Branded (QQ Logo)</option>
+            <option value="bold">Bold &amp; Energetic</option>
+          </select>
+        </div>
+        <div class="option-group">
+          <label>Duration</label>
+          <select id="opt-duration">
+            <option value="15">~15 seconds</option>
+            <option value="30">~30 seconds</option>
+            <option value="60">~60 seconds</option>
+          </select>
+        </div>
+        <div class="option-group">
+          <label>Music</label>
+          <select id="opt-music">
+            <option value="">No music</option>
+          </select>
+        </div>
+      </div>
+      <button id="btn-generate" class="btn-primary">Generate Video</button>
+      <div id="generate-status" class="status"></div>
+    </section>
+
+    <!-- Step 4: Download -->
+    <section id="step-download" class="card hidden">
+      <h2>4. Download</h2>
+      <p id="download-msg">Your video is ready.</p>
+      <a id="download-link" class="btn-primary" download>Download MP4</a>
+      <button id="btn-reset" class="btn-secondary">Start Over</button>
+    </section>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
