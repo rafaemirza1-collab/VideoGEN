@@ -88,6 +88,32 @@ function resolveClipSource(source) {
   return path.join(OUTPUT_DIR, '..', cleaned);
 }
 
+// Ken Burns effect patterns: zoom in, zoom out, pan left, pan right
+const KB_EFFECTS = [
+  // Zoom in from center
+  (w, h, fps, dur) => {
+    const frames = Math.round(fps * dur);
+    const zoomStep = 0.0015;
+    return `scale=${w * 4}:${h * 4},zoompan=z='min(zoom+${zoomStep},1.5)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=${frames}:s=${w}x${h}:fps=${fps}`;
+  },
+  // Zoom out from center
+  (w, h, fps, dur) => {
+    const frames = Math.round(fps * dur);
+    const zoomStep = 0.0015;
+    return `scale=${w * 4}:${h * 4},zoompan=z='max(1.5-on*${zoomStep},1.0)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=${frames}:s=${w}x${h}:fps=${fps}`;
+  },
+  // Pan left to right
+  (w, h, fps, dur) => {
+    const frames = Math.round(fps * dur);
+    return `scale=${w * 4}:${h * 4},zoompan=z='1.3':x='on/${frames}*(iw-iw/zoom)':y='ih/2-(ih/zoom/2)':d=${frames}:s=${w}x${h}:fps=${fps}`;
+  },
+  // Pan right to left
+  (w, h, fps, dur) => {
+    const frames = Math.round(fps * dur);
+    return `scale=${w * 4}:${h * 4},zoompan=z='1.3':x='(iw-iw/zoom)-(on/${frames}*(iw-iw/zoom))':y='ih/2-(ih/zoom/2)':d=${frames}:s=${w}x${h}:fps=${fps}`;
+  },
+];
+
 function buildSlideshow(clips, outputFile, width, height, fps, totalSeconds, project) {
   return new Promise((resolve, reject) => {
     let cmd = ffmpeg();
@@ -98,7 +124,6 @@ function buildSlideshow(clips, outputFile, width, height, fps, totalSeconds, pro
       const clipDuration = clip.duration / 1000;
 
       if (!src || !fs.existsSync(src)) {
-        // No source — generate a colored background as placeholder
         cmd = cmd
           .input(`color=c=0x1e3a5f:s=${width}x${height}:d=${clipDuration}:r=${fps}`)
           .inputOptions(['-f lavfi']);
@@ -114,14 +139,40 @@ function buildSlideshow(clips, outputFile, width, height, fps, totalSeconds, pro
 
     const filterParts = [];
     for (let i = 0; i < n; i++) {
-      filterParts.push(
-        `[${i}:v]scale=${width}:${height}:force_original_aspect_ratio=decrease,` +
-        `pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2:black,setsar=1[v${i}]`
-      );
+      const clip = clips[i];
+      const clipDuration = clip.duration / 1000;
+      const src = resolveClipSource(clip.source);
+      const effectFn = KB_EFFECTS[i % KB_EFFECTS.length];
+
+      if (!src || !fs.existsSync(src) || clip.type === 'video') {
+        // No Ken Burns for video clips or placeholders — just scale/pad
+        filterParts.push(
+          `[${i}:v]scale=${width}:${height}:force_original_aspect_ratio=decrease,` +
+          `pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2:black,setsar=1,fps=${fps}[v${i}]`
+        );
+      } else {
+        // Apply Ken Burns effect to image
+        const kbFilter = effectFn(width, height, fps, clipDuration);
+        filterParts.push(`[${i}:v]${kbFilter},setsar=1[v${i}]`);
+      }
     }
 
-    const concatInputs = clips.map((_, i) => `[v${i}]`).join('');
-    filterParts.push(`${concatInputs}concat=n=${n}:v=1:a=0[vout]`);
+    // Add crossfade transitions between clips (0.5s overlap)
+    const fadeDur = 0.5;
+    if (n === 1) {
+      filterParts.push(`[v0]copy[vout]`);
+    } else {
+      // Chain xfade filters
+      let prevLabel = 'v0';
+      for (let i = 1; i < n; i++) {
+        const outLabel = i === n - 1 ? 'vout' : `xf${i}`;
+        const offset = clips.slice(0, i).reduce((sum, c) => sum + c.duration / 1000, 0) - fadeDur;
+        filterParts.push(
+          `[${prevLabel}][v${i}]xfade=transition=fade:duration=${fadeDur}:offset=${Math.max(0, offset)}[${outLabel}]`
+        );
+        prevLabel = outLabel;
+      }
+    }
 
     cmd.complexFilter(filterParts, ['vout'])
       .outputOptions(['-c:v libx264', '-preset fast', '-pix_fmt yuv420p', `-r ${fps}`, '-an'])

@@ -111,20 +111,21 @@ export default function ExportPanel() {
 
       {videoFile && (
         <>
-          <a
-            href={`/output/${videoFile}`}
-            download
-            className="block mt-3 w-full py-2 text-center bg-bg-hover border border-border rounded-lg text-sm text-white font-medium hover:border-border-hover"
-          >
-            Download {videoFile}
-          </a>
           <div className="mt-3">
             <video
               src={`/output/${videoFile}`}
               controls
+              autoPlay
               className="w-full rounded-lg"
             />
           </div>
+          <a
+            href={`/output/${videoFile}`}
+            download
+            className="block mt-2 w-full py-2 text-center bg-bg-hover border border-border rounded-lg text-xs text-text-muted font-medium hover:border-border-hover hover:text-white"
+          >
+            Download MP4
+          </a>
         </>
       )}
     </div>
