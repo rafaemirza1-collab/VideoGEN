@@ -32,17 +32,33 @@ async function renderTimeline(project) {
   const textTracks = tracks.filter(t => t.visible && t.type === 'text');
   const audioTracks = tracks.filter(t => t.visible && t.type === 'audio');
 
-  // Collect all image clips sorted by time
+  // Collect all image/video clips sorted by time
   const imageClips = imageTracks.flatMap(t => t.clips).sort((a, b) => a.startTime - b.startTime);
   const textClips = textTracks.flatMap(t => t.clips).sort((a, b) => a.startTime - b.startTime);
 
-  // Step 1: Build base video from image clips (slideshow)
+  // Step 1: Build base video
   const baseVideo = path.join(sessionDir, 'base.mp4');
 
-  if (imageClips.length > 0) {
+  // If there's a single video clip (from cinematic capture), pass it through directly
+  const singleVideo = imageClips.length === 1 && imageClips[0].type === 'video'
+    ? resolveClipSource(imageClips[0].source)
+    : null;
+
+  if (singleVideo && fs.existsSync(singleVideo)) {
+    // Re-encode to ensure consistent format/resolution
+    await new Promise((resolve, reject) => {
+      ffmpeg(singleVideo)
+        .outputOptions([
+          `-vf scale=${width}:${height}:force_original_aspect_ratio=decrease,pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2:black,setsar=1`,
+          '-c:v libx264', '-preset fast', '-pix_fmt yuv420p', `-r ${fps}`, '-an'
+        ])
+        .save(baseVideo)
+        .on('end', resolve)
+        .on('error', (err, _, stderr) => reject(new Error(stderr || err.message)));
+    });
+  } else if (imageClips.length > 0) {
     await buildSlideshow(imageClips, baseVideo, width, height, fps, totalSeconds, project);
   } else {
-    // Black background
     await createBlackVideo(baseVideo, width, height, fps, totalSeconds);
   }
 
