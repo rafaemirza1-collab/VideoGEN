@@ -12,14 +12,15 @@ import ExportPanel from '@/components/panels/ExportPanel';
 import AssetPanel from '@/components/panels/AssetPanel';
 import AnimationPanel from '@/components/panels/AnimationPanel';
 import BrandPanel from '@/components/panels/BrandPanel';
+import AIGeneratePanel from '@/components/panels/AIGeneratePanel';
 
-type SideTab = 'capture' | 'assets' | 'brand' | 'export';
+type SideTab = 'ai' | 'capture' | 'assets' | 'brand' | 'export';
 type RightTab = 'properties' | 'animation';
 
 export default function EditorPage() {
   const params = useParams();
   const { setProject, project, addTrack, addClip } = useProjectStore();
-  const [sideTab, setSideTab] = useState<SideTab>('capture');
+  const [sideTab, setSideTab] = useState<SideTab>('ai');
   const [rightTab, setRightTab] = useState<RightTab>('properties');
   const selectedClipIds = useTimelineStore((s) => s.selectedClipIds);
 
@@ -121,7 +122,7 @@ export default function EditorPage() {
         {/* Left sidebar */}
         <div className="w-64 bg-bg-card border-r border-border flex flex-col shrink-0">
           <div className="flex border-b border-border">
-            {(['capture', 'assets', 'brand', 'export'] as SideTab[]).map((tab) => (
+            {(['ai', 'capture', 'assets', 'brand', 'export'] as SideTab[]).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setSideTab(tab)}
@@ -134,6 +135,7 @@ export default function EditorPage() {
             ))}
           </div>
           <div className="flex-1 overflow-y-auto">
+            {sideTab === 'ai' && <AIGeneratePanel />}
             {sideTab === 'capture' && <CapturePanel />}
             {sideTab === 'assets' && <AssetPanel />}
             {sideTab === 'brand' && <BrandPanel />}
