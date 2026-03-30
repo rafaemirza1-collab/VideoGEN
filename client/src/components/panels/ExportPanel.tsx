@@ -97,6 +97,12 @@ export default function ExportPanel() {
         {loading ? 'Rendering...' : 'Export MP4'}
       </button>
 
+      {loading && (
+        <div className="mt-2 w-full h-1.5 bg-bg rounded-full overflow-hidden">
+          <div className="h-full bg-blue-500 rounded-full animate-pulse" style={{ width: '60%' }} />
+        </div>
+      )}
+
       {status && (
         <p className={`text-xs mt-2 ${status.startsWith('Error') ? 'text-error' : 'text-success'}`}>
           {status}

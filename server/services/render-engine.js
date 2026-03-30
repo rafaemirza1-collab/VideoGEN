@@ -95,9 +95,21 @@ function buildSlideshow(clips, outputFile, width, height, fps, totalSeconds, pro
 
     clips.forEach(clip => {
       const src = resolveClipSource(clip.source);
-      if (!src || !fs.existsSync(src)) return;
       const clipDuration = clip.duration / 1000;
-      cmd = cmd.input(src).inputOptions(['-loop 1', `-t ${clipDuration}`]);
+
+      if (!src || !fs.existsSync(src)) {
+        // No source — generate a colored background as placeholder
+        cmd = cmd
+          .input(`color=c=0x1e3a5f:s=${width}x${height}:d=${clipDuration}:r=${fps}`)
+          .inputOptions(['-f lavfi']);
+        return;
+      }
+
+      if (clip.type === 'video') {
+        cmd = cmd.input(src).inputOptions([`-t ${clipDuration}`]);
+      } else {
+        cmd = cmd.input(src).inputOptions(['-loop 1', `-t ${clipDuration}`]);
+      }
     });
 
     const filterParts = [];

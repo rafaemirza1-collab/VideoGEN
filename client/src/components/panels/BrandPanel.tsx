@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useProjectStore } from '@/stores/project-store';
+import { useToastStore } from '@/components/ui/Toast';
 
 interface BrandKit {
   id: string;
@@ -30,13 +31,16 @@ export default function BrandPanel() {
   const [creating, setCreating] = useState(false);
   const project = useProjectStore((s) => s.project);
   const { updateClipProperties } = useProjectStore();
+  const addToast = useToastStore((s) => s.addToast);
 
   const loadBrands = async () => {
     try {
       const res = await fetch('/api/brands');
       const data = await res.json();
       setBrands(data.brands || []);
-    } catch {}
+    } catch {
+      addToast('Failed to load brand kits', 'error');
+    }
   };
 
   useEffect(() => { loadBrands(); }, []);
@@ -57,11 +61,13 @@ export default function BrandPanel() {
     }
     setEditing(null);
     setCreating(false);
+    addToast('Brand kit saved', 'success');
     loadBrands();
   };
 
   const deleteBrand = async (id: string) => {
     await fetch(`/api/brands/${id}`, { method: 'DELETE' });
+    addToast('Brand kit deleted', 'info');
     loadBrands();
   };
 

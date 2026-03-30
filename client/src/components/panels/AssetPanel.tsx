@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useProjectStore } from '@/stores/project-store';
 import { useTimelineStore } from '@/stores/timeline-store';
+import { useToastStore } from '@/components/ui/Toast';
 
 interface Asset {
   id: string;
@@ -21,6 +22,7 @@ export default function AssetPanel() {
   const fileRef = useRef<HTMLInputElement>(null);
   const { addTrack, addClip, project } = useProjectStore();
   const { playheadTime } = useTimelineStore();
+  const addToast = useToastStore((s) => s.addToast);
 
   const loadAssets = async () => {
     try {
@@ -28,7 +30,9 @@ export default function AssetPanel() {
       const res = await fetch(url);
       const data = await res.json();
       setAssets(data.assets || []);
-    } catch {}
+    } catch {
+      addToast('Failed to load assets', 'error');
+    }
   };
 
   useEffect(() => {
@@ -43,9 +47,13 @@ export default function AssetPanel() {
       const form = new FormData();
       form.append('file', file);
       try {
-        await fetch('/api/assets/upload', { method: 'POST', body: form });
-      } catch {}
+        const res = await fetch('/api/assets/upload', { method: 'POST', body: form });
+        if (!res.ok) throw new Error();
+      } catch {
+        addToast(`Failed to upload ${file.name}`, 'error');
+      }
     }
+    addToast('Upload complete', 'success');
     setUploading(false);
     loadAssets();
     if (fileRef.current) fileRef.current.value = '';

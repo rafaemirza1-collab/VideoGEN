@@ -109,6 +109,20 @@ export default function PreviewCanvas() {
           const animStyle = getAnimationStyle(clip, playheadTime);
 
           if (clip.type === 'image' || clip.type === 'website-capture') {
+            // Handle placeholder visuals (no source, just colored bg)
+            if (!clip.source) {
+              return (
+                <div
+                  key={clip.id}
+                  className="absolute inset-0 w-full h-full"
+                  style={{
+                    backgroundColor: '#1e3a5f',
+                    opacity: clip.properties.opacity,
+                    ...animStyle,
+                  }}
+                />
+              );
+            }
             const src = clip.source.startsWith('../uploads')
               ? clip.source.replace('..', '')
               : `/output/${clip.source.replace(/\\/g, '/')}`;
@@ -119,6 +133,22 @@ export default function PreviewCanvas() {
                 alt=""
                 className="absolute inset-0 w-full h-full object-contain"
                 style={{ opacity: clip.properties.opacity, ...animStyle }}
+              />
+            );
+          }
+
+          if (clip.type === 'video') {
+            const src = clip.source.startsWith('../uploads')
+              ? clip.source.replace('..', '')
+              : `/output/${clip.source.replace(/\\/g, '/')}`;
+            return (
+              <video
+                key={clip.id}
+                src={src}
+                className="absolute inset-0 w-full h-full object-contain"
+                style={{ opacity: clip.properties.opacity, ...animStyle }}
+                muted
+                playsInline
               />
             );
           }
