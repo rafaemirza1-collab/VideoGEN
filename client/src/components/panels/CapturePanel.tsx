@@ -26,23 +26,36 @@ export default function CapturePanel() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
 
-      const trackId = addTrack('image', `${new URL(url).hostname}`);
-      const perClip = useProjectStore.getState().project.duration / data.screenshots.length;
-
-      data.screenshots.forEach((shot: { file: string; index: number }, i: number) => {
+      // New: capture returns a single video file
+      if (data.videoFile) {
+        const trackId = addTrack('video', `${new URL(url).hostname}`);
+        const projectDuration = useProjectStore.getState().project.duration;
         addClip(trackId, {
-          type: 'website-capture',
-          startTime: i * perClip,
-          duration: perClip,
-          source: shot.file,
+          type: 'video',
+          startTime: 0,
+          duration: projectDuration,
+          source: data.videoFile,
           properties: {
             x: 0, y: 0, width: 100, height: 100,
             rotation: 0, opacity: 1,
           },
         });
-      });
-
-      setStatus(`Captured ${data.screenshots.length} shots`);
+        setStatus(`Captured! Video ready.`);
+      } else {
+        // Fallback: old screenshot mode
+        const trackId = addTrack('image', `${new URL(url).hostname}`);
+        const perClip = useProjectStore.getState().project.duration / data.screenshots.length;
+        data.screenshots.forEach((shot: { file: string; index: number }, i: number) => {
+          addClip(trackId, {
+            type: 'website-capture',
+            startTime: i * perClip,
+            duration: perClip,
+            source: shot.file,
+            properties: { x: 0, y: 0, width: 100, height: 100, rotation: 0, opacity: 1 },
+          });
+        });
+        setStatus(`Captured ${data.screenshots.length} shots`);
+      }
       setUrl('');
     } catch (err: any) {
       setStatus(`Error: ${err.message}`);
