@@ -34,7 +34,7 @@ export default function CapturePanel() {
           type: 'video',
           startTime: 0,
           duration: projectDuration,
-          source: data.videoFile,
+          source: `output/${data.videoFile}`,
           properties: {
             x: 0, y: 0, width: 100, height: 100,
             rotation: 0, opacity: 1,

@@ -93,13 +93,19 @@ async function renderTimeline(project) {
 
 function resolveClipSource(source) {
   if (!source) return null;
-  // Handle relative paths from different formats
   const cleaned = source.replace(/\\/g, '/');
   if (cleaned.startsWith('../uploads/')) {
     return path.join(UPLOADS_DIR, cleaned.replace('../uploads/', ''));
   }
+  if (cleaned.startsWith('uploads/')) {
+    return path.join(UPLOADS_DIR, cleaned.replace('uploads/', ''));
+  }
   if (cleaned.startsWith('output/')) {
-    return path.join(OUTPUT_DIR, '..', cleaned);
+    return path.join(OUTPUT_DIR, cleaned.replace('output/', ''));
+  }
+  // bare filename — assume it's in output
+  if (!cleaned.includes('/')) {
+    return path.join(OUTPUT_DIR, cleaned);
   }
   return path.join(OUTPUT_DIR, '..', cleaned);
 }

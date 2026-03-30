@@ -123,9 +123,12 @@ export default function PreviewCanvas() {
                 />
               );
             }
-            const src = clip.source.startsWith('../uploads')
-              ? clip.source.replace('..', '')
-              : `/output/${clip.source.replace(/\\/g, '/')}`;
+            const cleanImgSrc = clip.source.replace(/\\/g, '/').replace(/^\.\.\//, '/');
+            const src = cleanImgSrc.startsWith('/uploads') || cleanImgSrc.startsWith('/output')
+              ? cleanImgSrc
+              : cleanImgSrc.startsWith('output/')
+              ? `/${cleanImgSrc}`
+              : `/output/${cleanImgSrc}`;
             return (
               <img
                 key={clip.id}
@@ -138,9 +141,12 @@ export default function PreviewCanvas() {
           }
 
           if (clip.type === 'video') {
-            const src = clip.source.startsWith('../uploads')
-              ? clip.source.replace('..', '')
-              : `/output/${clip.source.replace(/\\/g, '/')}`;
+            const cleanSrc = clip.source.replace(/\\/g, '/');
+            const src = cleanSrc.startsWith('uploads/')
+              ? `/${cleanSrc}`
+              : cleanSrc.startsWith('output/')
+              ? `/${cleanSrc}`
+              : `/output/${cleanSrc}`;
             return (
               <video
                 key={clip.id}

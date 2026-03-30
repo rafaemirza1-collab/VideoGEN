@@ -291,11 +291,12 @@ async function captureWebsite(url, viewport = 'desktop') {
     // Cleanup frames
     try { fs.rmSync(sessionDir, { recursive: true, force: true }); } catch (_) {}
 
-    const relVideo = path.relative(path.join(__dirname, '..'), videoFile);
+    // Return just the filename, not a relative path — served via /output/:file
+    const videoFilename = path.basename(videoFile);
     return {
       sessionId,
-      screenshots: [{ file: relVideo, index: 0, isVideo: true }],
-      videoFile: relVideo,
+      screenshots: [{ file: videoFilename, index: 0, isVideo: true }],
+      videoFile: videoFilename,
       viewport
     };
 
