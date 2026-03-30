@@ -10,7 +10,7 @@ const VIEWPORTS = {
 };
 
 async function captureWebsite(url, viewport = 'desktop') {
-  const browser = await puppeteer.launch({ headless: 'new' });
+  const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   const page = await browser.newPage();
   const vp = VIEWPORTS[viewport] || VIEWPORTS.desktop;
   await page.setViewport(vp);
